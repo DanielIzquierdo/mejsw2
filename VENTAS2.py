@@ -3,12 +3,12 @@ class Tienda_video_juegos(object):
     """clase que simula ser la tienda de videojuegos"""
     def __init__(self, lista_productos):
         """lista productos es un diccionario:
-            {"call of duty":"150",
-             "fifa 2016":"100",
-             "uncharted 4":"200",
-             "play station 4":"600",
-             "xbox 360":"400",
-             "wii":"200",}
+            {"callofduty":150,
+             "fifa2016":100,
+             "uncharted4":200,
+             "playstation 4":600,
+             "xbox360":400,
+             "wii":200,}
             """
         self.productos = lista_productos
 
@@ -17,6 +17,7 @@ class Tienda_video_juegos(object):
            :param tipo_pago: cadena con el tipo de pago
            :param lista_compras: tiene el formato ["item1", "item2", ...]
         """
+        venta = {}
         subtotal = 0
         descuento = 0
         if tipo_pago not in ["credito", "contado"]:
@@ -26,10 +27,13 @@ class Tienda_video_juegos(object):
                 subtotal += self.productos[item]
             except:
                 return 0b0
+        numero_obsequios = Obsequio.obtener_obsequio(subtotal)
         descuento = Descuento.total_descuento(subtotal, tipo_pago, fecha)
-        total = subtotal - descuento
+        venta["total_a_pagar"] = subtotal - descuento
+        venta["subtotal"] = subtotal
+        venta["obsequios"] = numero_obsequios
         # print ' Subtotal: {}\n Descuento:{}\n Total a Pagar: {}'.format(subtotal, descuento, total)
-        return total
+        return venta
 
 
 
@@ -63,6 +67,21 @@ class Descuento(object):
         total_dcto = (total_dcto/100.0) * subtotal
 
         return total_dcto
+
+class Obsequio(object):
+    """clase que determina la cantidad de obsequios otorgados en cada venta"""
+    @classmethod
+    def obtener_obsequio(cls, consumo):
+        n_obsequio=0
+        if consumo > 600:
+            n_obsequio = 3
+        elif consumo > 500 and consumo <= 600:
+            n_obsequio = 2
+        elif consumo > 350 and consumo <= 500:
+            n_obsequio = 1
+
+        return n_obsequio
+
 
 # if __name__ == "__main__":
 #     lista_productos = {"playstation4":  600,
