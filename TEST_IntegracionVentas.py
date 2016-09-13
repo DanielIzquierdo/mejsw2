@@ -16,63 +16,63 @@ class Test_system(unittest.TestCase):
         tipo_pago = "contado"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 285)
+        self.assertEqual(venta["total_a_pagar"], 285)
 
     def test_fecha_descuento_5_porciento_monto(self):
         fecha = "20/05/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "fifa2016", "callofdutty"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 427.5)
+        self.assertEqual(venta["total_a_pagar"], 427.5)
 
     def test_fecha_descuento_20_porciento(self):
         fecha = "20/11/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 240)
+        self.assertEqual(venta["total_a_pagar"], 240)
 
     def test_fecha_descuento_30_porciento(self):
         fecha = "26/12/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 210)
+        self.assertEqual(venta["total_a_pagar"], 210)
 
     def test_fecha_sin_descuento_diciembre(self):
         fecha = "16/12/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 300)
+        self.assertEqual(venta["total_a_pagar"], 300)
 
     def test_fecha_descuento_50_porciento(self):
         fecha = "06/01/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 150)
+        self.assertEqual(venta["total_a_pagar"], 150)
 
     def test_fecha_sin_descuento_enero(self):
         fecha = "16/01/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 300)
+        self.assertEqual(venta["total_a_pagar"], 300)
 
     def test_elemento_compra_invalido(self):
         fecha = "16/01/2015"
         tipo_pago = "credito"
         lista_compras = ["wii", "caramelo"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 0b0)
+        self.assertEqual(venta["total_a_pagar"], 0b0)
 
     def test_tipo_pago_invalido(self):
         fecha = "16/01/2015"
         tipo_pago = "fiado"
         lista_compras = ["wii", "fifa2016"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
-        self.assertEqual(venta.total_a_pagar, 0b0)
+        self.assertEqual(venta["total_a_pagar"], 0b0)
 
     #### test unitarios Obsequio
     def test_compra_sin_obsequio(self):
