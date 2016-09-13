@@ -21,12 +21,12 @@ class Tienda_video_juegos(object):
         subtotal = 0
         descuento = 0
         if tipo_pago not in ["credito", "contado"]:
-            return 0b0
+            return {"total_a_pagar":0b0}
         for item in lista_compras:
             try:
                 subtotal += self.productos[item]
             except:
-                return 0b0
+                return {"total_a_pagar":0b0}
         numero_obsequios = Obsequio.obtener_obsequio(subtotal)
         descuento = Descuento.total_descuento(subtotal, tipo_pago, fecha)
         venta["total_a_pagar"] = subtotal - descuento
