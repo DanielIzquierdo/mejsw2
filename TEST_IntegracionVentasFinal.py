@@ -1,5 +1,6 @@
 import unittest
-from VENTAS2 import Tienda_video_juegos, Obsequio
+from datetime import datetime
+from VENTAS3_refactorizado import Tienda_video_juegos, Obsequio, Tarjeta
 
 class Test_system(unittest.TestCase):
     def setUp(self):
@@ -124,6 +125,60 @@ class Test_system(unittest.TestCase):
         lista_compras = ["callofdutty", "playstation4"]
         venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
         self.assertEqual(venta["obsequios"], 3)
+
+    #test integracion Tarjeta Regalo - Venta
+    def test_regala_tarjeta_descuento_noviembre(self):
+        fecha = "16/11/2015"
+        tipo_pago = "credito"
+        lista_compras = ["callofdutty", "playstation4"]
+        venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
+        self.assertTrue(venta["tarjeta"]!=None)
+
+    def test_no_regala_tarjeta_no_noviembre(self):
+        fecha = "16/10/2015"
+        tipo_pago = "credito"
+        lista_compras = ["callofdutty", "playstation4"]
+        venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
+        self.assertTrue(venta["tarjeta"] == None)
+
+    def test_no_regala_tarjeta_monto(self):
+        fecha = "16/11/2015"
+        tipo_pago = "credito"
+        lista_compras = ["callofdutty"]
+        venta = self.tienda.venta(fecha, tipo_pago, lista_compras)
+        self.assertTrue(venta["tarjeta"] == None)
+
+    def test_tarjeta_expirada(self):
+        tarjeta_expirada= Tarjeta(fecha_expedicion=datetime.strptime("20/02/2015", '%d/%m/%Y'))
+        fecha_hoy = "21/02/2016"
+        tipo_pago = "credito"
+        lista_compras = ["callofdutty"]
+        venta = self.tienda.venta(fecha_hoy, tipo_pago, lista_compras, tarjeta=tarjeta_expirada)
+        self.assertFalse(venta["tarjeta"].activada)
+
+    def test_ventas_aumentan_regalo_tarjetas(self):
+        lista_octubre = [["callofdutty", "playstation4"],["callofdutty", "playstation4"]]
+        lista_noviembre = [["callofdutty", "playstation4"],["callofdutty", "playstation4"],["callofdutty", "playstation4"]]
+        fecha_octubre = "21/10/2015"
+        fecha_noviembre = "30/11/2015"
+        tipo_pago = "credito"
+        ventas_octubre = self.tienda.ventas_masivas(fecha_octubre, tipo_pago, lista_octubre)
+        ventas_noviembre = self.tienda.ventas_masivas(fecha_noviembre, tipo_pago, lista_noviembre)
+        self.assertTrue(self.tienda.regalo_tarjetas)
+
+    def test_ventas_disminuyen_no_regalo_tarjetas(self):
+        lista_noviembre = [["callofdutty", "playstation4"], ["callofdutty", "playstation4"]]
+        lista_octubre = [["callofdutty", "playstation4"], ["callofdutty", "playstation4"],
+                           ["callofdutty", "playstation4"]]
+        fecha_octubre = "21/10/2015"
+        fecha_noviembre = "30/11/2015"
+        tipo_pago = "credito"
+        ventas_octubre = self.tienda.ventas_masivas(fecha_octubre, tipo_pago, lista_octubre)
+        ventas_noviembre = self.tienda.ventas_masivas(fecha_noviembre, tipo_pago, lista_noviembre)
+        self.assertFalse(self.tienda.regalo_tarjetas)
+
+
+
 
 if __name__ == '__main__':
 	unittest.main()
