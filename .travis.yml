@@ -5,7 +5,7 @@ python:
 before_install: "pip install -r requirements.txt"
 
 script:
-  - python -m coverage run TEST_IntegracionVentas.py
+  - python -m coverage run TEST_IntegracionVentasFinal.py
 
 after_script:
   - "coveralls"
